@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>eBook Store - Filter by Genre/Series</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f4f4f4;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    .filters, .ebook-list {
+      max-width: 600px;
+      margin: 20px auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    select {
+      padding: 10px;
+      margin-right: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    .ebook-item {
+      background: #e8e8e8;
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>eBook Store</h1>
+
+  <div class="filters">
+    <label for="genre">Filter by Genre:</label>
+    <select id="genre" onchange="filterEbooks()">
+      <option value="">All</option>
+    </select>
+
+    <label for="series">Filter by Series:</label>
+    <select id="series" onchange="filterEbooks()">
+      <option value="">All</option>
+    </select>
+  </div>
+
+  <div class="ebook-list" id="ebook-list">
+    <!-- eBooks will display here -->
+  </div>
+
+  <script>
+    const ebooks = [
+      { id: 1, title: "Space Adventures", genre: "Sci-Fi", series: "Galaxy Quest" },
+      { id: 2, title: "Love in Paris", genre: "Romance", series: "Love Tales" },
+      { id: 3, title: "Robot Wars", genre: "Sci-Fi", series: "Galaxy Quest" },
+      { id: 4, title: "Mystery Manor", genre: "Mystery", series: "Detective Series" },
+      { id: 5, title: "Alien Encounters", genre: "Sci-Fi", series: "Galaxy Quest" },
+      { id: 6, title: "Heart Strings", genre: "Romance", series: "Love Tales" }
+    ];
+
+    // Dynamically populate the filter dropdowns
+    window.onload = function() {
+      populateFilters();
+      filterEbooks();
+    };
+
+    function populateFilters() {
+      const genres = [...new Set(ebooks.map(book => book.genre))];
+      const series = [...new Set(ebooks.map(book => book.series))];
+
+      const genreSelect = document.getElementById('genre');
+      const seriesSelect = document.getElementById('series');
+
+      genres.forEach(genre => {
+        genreSelect.innerHTML += `<option value="${genre}">${genre}</option>`;
+      });
+
+      series.forEach(serie => {
+        seriesSelect.innerHTML += `<option value="${serie}">${serie}</option>`;
+      });
+    }
+
+    function filterEbooks() {
+      const genreFilter = document.getElementById('genre').value;
+      const seriesFilter = document.getElementById('series').value;
+      const ebookList = document.getElementById('ebook-list');
+
+      const filtered = ebooks.filter(ebook => {
+        return (genreFilter === "" || ebook.genre === genreFilter) &&
+               (seriesFilter === "" || ebook.series === seriesFilter);
+      });
+
+      ebookList.innerHTML = "";
+      if (filtered.length === 0) {
+        ebookList.innerHTML = "<p>No eBooks found.</p>";
+      } else {
+        filtered.forEach(ebook => {
+          ebookList.innerHTML += `
+            <div class="ebook-item">
+              <h3>${ebook.title}</h3>
+              <p><strong>Genre:</strong> ${ebook.genre}</p>
+              <p><strong>Series:</strong> ${ebook.series}</p>
+            </div>
+          `;
+        });
+      }
+    }
+  </script>
+
+</body>
+</html>
